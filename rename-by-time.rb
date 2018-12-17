@@ -45,10 +45,6 @@ def rename_with_suffix(file)
     if(base =~ /(.*)_()/)
     end
 end
-str = "hello <ruby> world"
-if str =~ /<(\w+)>/
-  puts $1
-end
 
 if __FILE__ == $0
   ARGV.each do |file_or_dir|
