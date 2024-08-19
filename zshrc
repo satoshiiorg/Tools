@@ -15,12 +15,11 @@ CYAN="${ESC}[36m"
 
 function preexec() {
   start_seconds=`date +%s`
-  start_time=`date +%T`
 }
 
 function precmd() {
   # 空打ちした時は何もしない
-  if [ -z "$start_time" ]; then
+  if [ -z "$start_seconds" ]; then
     return 0
   fi
   
@@ -36,8 +35,13 @@ function precmd() {
 
   # 一定時間以上かかってたら通知
   if [ "$run_seconds" -gt 5 ]; then
-    osascript -e "display notification \"${end_time} (${run_seconds}秒)\" with title \"実行完了\""
-    say "実行完了: ${run_seconds}秒"
+    if [ "$run_seconds" -gt 60 ]; then
+      runtime="$((${run_seconds} / 60))分$((${run_seconds} % 60))秒"
+    else
+      runtime="${run_seconds}秒"
+    fi
+    osascript -e "display notification \"${end_time} (${runtime})\" with title \"実行完了\""
+    say "実行完了: ${runtime}"
 #  else
 #    # そうでなければベルだけ鳴らす
 #    echo "\007"
